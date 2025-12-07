@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var predictedWakeUpTime: Date = Date.now
     @State private var showMessage = false
     
+    
     var body : some View{
         NavigationStack{
             VStack(spacing: 20){
@@ -25,7 +26,10 @@ struct ContentView: View {
                 Stepper("\(SleepAmount.formatted()) Hours", value: $SleepAmount, in: 4...14, step: 0.5).padding(.horizontal, 40)
                 
                 Text("Coffee per day?").font(.headline).bold()
-                Stepper("\(coffeeA.formatted()) Cups", value: $coffeeA, in: 0...10).padding(.horizontal, 40)
+                Stepper(
+                    coffeeA == 1 ? "1 Cup" : 
+                    "\(coffeeA.formatted()) Cups", value: $coffeeA, in: 0...10)
+                .padding(.horizontal, 40)
                 
                 Button("Calculate", role: .confirm){
                     calc()
@@ -35,7 +39,7 @@ struct ContentView: View {
                     VStack{
                         Text("You should sleep by...")
                         Text("\(predictedWakeUpTime.formatted(date: .omitted, time: .shortened))")
-                    }.padding().glassEffect(.regular.interactive())
+                    }
                 }
                 
                 
