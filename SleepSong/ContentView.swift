@@ -39,13 +39,25 @@ struct ContentView: View {
                     DatePicker("Select wakeup time", selection: $wakeUp, displayedComponents: .hourAndMinute).labelsHidden()
                     
                     Text("Desired amount of sleep?").font(.headline).bold()
-                    Stepper("\(SleepAmount.formatted()) Hours", value: $SleepAmount, in: 4...14, step: 0.5).padding(.horizontal, 40)
+                    
+                    Stepper(value: $SleepAmount, in: 4...14, step: 0.5){
+                        Text("\(SleepAmount.formatted()) Hours")
+                            .contentTransition(.numericText(value: Double(SleepAmount)))
+                            .animation(.easeInOut, value: SleepAmount)
+                    }
+                        .padding(.horizontal, 40)
                     
                     Text("Coffee per day?").font(.headline).bold()
-                    Stepper(
-                        coffeeA == 1 ? "1 Cup" :
-                            "\(coffeeA.formatted()) Cups", value: $coffeeA, in: 0...10)
+                    Stepper(value: $coffeeA, in: 0...10) {
+                        Text(coffeeA == 1 ? "1 Cup" : "\(coffeeA.formatted()) Cups")
+                        
+                            .contentTransition(.numericText(value: Double(coffeeA)))
+                            .animation(.easeInOut, value: coffeeA)
+                    }
                     .padding(.horizontal, 40)
+
+
+                    
                     
                     Button("Calculate", role: .confirm){
                         calc()
@@ -56,9 +68,9 @@ struct ContentView: View {
                         VStack{
                             Text("You should sleep by...").textStylerS()
                             Text("\(predictedWakeUpTime.formatted(date: .omitted, time: .shortened))").textStylerS()
+                            
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity).padding()
-                        
                     }
                 
                 
@@ -82,7 +94,11 @@ struct ContentView: View {
         } catch {
             print("Something went wrong...")
         }
-         showMessage = true
+        
+        withAnimation(.easeInOut){
+            showMessage = true
+        }
+        
             }
         }
     
