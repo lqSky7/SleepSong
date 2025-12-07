@@ -18,6 +18,12 @@ struct ContentView: View {
                    in: Date.now...,
                    displayedComponents: .hourAndMinute).labelsHidden()
     }
+    func exp(){
+        var comps : DateComponents = DateComponents()
+        comps.hour = 5
+        comps.minute = Calendar.current.component(.minute, from: Date.now)
+        let userSetDate = Calendar.current.date(from: comps) ?? .now
+    }
 }
 
 #Preview {
