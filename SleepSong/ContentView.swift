@@ -8,14 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var sleepHours : Double = 8.0
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        Stepper("Sleep Hours \(sleepHours.formatted())", value: $sleepHours, in: 2...16, step: 0.5)
     }
 }
 
