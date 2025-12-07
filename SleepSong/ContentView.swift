@@ -8,6 +8,21 @@
 import SwiftUI
 import CoreML
 
+struct textStyler : ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.title3)
+            .fontDesign(.serif)
+            .fontWidth(.expanded)
+    }
+}
+
+extension View {
+    func textStylerS() -> some View {
+        modifier(textStyler())
+    }
+}
+
 struct ContentView: View {
     @State private var wakeUp = Date.now
     @State private var coffeeA = 2
@@ -18,29 +33,34 @@ struct ContentView: View {
     
     var body : some View{
         NavigationStack{
-            VStack(spacing: 20){
-                Text("Your wake up time?").font(.headline).bold()
-                DatePicker("Select wakeup time", selection: $wakeUp, displayedComponents: .hourAndMinute).labelsHidden()
-                
-                Text("Desired amount of sleep?").font(.headline).bold()
-                Stepper("\(SleepAmount.formatted()) Hours", value: $SleepAmount, in: 4...14, step: 0.5).padding(.horizontal, 40)
-                
-                Text("Coffee per day?").font(.headline).bold()
-                Stepper(
-                    coffeeA == 1 ? "1 Cup" : 
-                    "\(coffeeA.formatted()) Cups", value: $coffeeA, in: 0...10)
-                .padding(.horizontal, 40)
-                
-                Button("Calculate", role: .confirm){
-                    calc()
-                }.buttonStyle(.glassProminent).padding().tint(.primary)
-                
-                if(showMessage){
-                    VStack{
-                        Text("You should sleep by...")
-                        Text("\(predictedWakeUpTime.formatted(date: .omitted, time: .shortened))")
-                    }
+            Form{
+                VStack(spacing: 20){
+                    Text("Your wake up time?").font(.headline).bold()
+                    DatePicker("Select wakeup time", selection: $wakeUp, displayedComponents: .hourAndMinute).labelsHidden()
+                    
+                    Text("Desired amount of sleep?").font(.headline).bold()
+                    Stepper("\(SleepAmount.formatted()) Hours", value: $SleepAmount, in: 4...14, step: 0.5).padding(.horizontal, 40)
+                    
+                    Text("Coffee per day?").font(.headline).bold()
+                    Stepper(
+                        coffeeA == 1 ? "1 Cup" :
+                            "\(coffeeA.formatted()) Cups", value: $coffeeA, in: 0...10)
+                    .padding(.horizontal, 40)
+                    
+                    Button("Calculate", role: .confirm){
+                        calc()
+                    }.buttonStyle(.glassProminent).padding().tint(.primary)
+                    
                 }
+                    if(showMessage){
+                        VStack{
+                            Text("You should sleep by...").textStylerS()
+                            Text("\(predictedWakeUpTime.formatted(date: .omitted, time: .shortened))").textStylerS()
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity).padding()
+                        
+                    }
+                
                 
                 
             }.navigationTitle("SleepSong").navigationBarTitleDisplayMode(.automatic)
