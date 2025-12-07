@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FoundationModels
 import CoreML
 
 struct textStyler : ViewModifier {
@@ -24,6 +25,8 @@ extension View {
 }
 
 struct ContentView: View {
+    let session = LanguageModelSession(instructions: "You are given user's desired waking up time, desired sleep time, cups of coffee and predicted wake up time. Generate instructions specific to the user. Give minimal advice to help improve their sleep schedule")
+    @State var Fresult: AttributedString = ""
     @State private var wakeUp = Date.now
     @State private var coffeeA = 2
     @State private var SleepAmount = 8.0
@@ -68,7 +71,14 @@ struct ContentView: View {
                         VStack{
                             Text("You should sleep by...").textStylerS()
                             Text("\(predictedWakeUpTime.formatted(date: .omitted, time: .shortened))").textStylerS()
-                            
+                                .task{
+                                    do {
+                                        let responseFromFL = try await session.respond(to: "Wake up time: \(wakeUp.formatted(date: .omitted, time: .shortened)), Coffee cups:\(coffeeA), desired sleep time: \(SleepAmount)")
+                                        Fresult = try AttributedString(markdown: responseFromFL.content)
+                                    } catch {}
+                                }
+                            Text("Additional Instructions:").padding(.top, 20).textStylerS()
+                            Text(\(Fresult)).padding(.top, 5)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity).padding()
                     }
