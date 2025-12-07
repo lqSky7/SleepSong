@@ -25,7 +25,7 @@ extension View {
 }
 
 struct ContentView: View {
-    let session = LanguageModelSession(instructions: "You are given user's desired waking up time, desired sleep time, cups of coffee and predicted wake up time. Generate instructions specific to the user. Give minimal advice to help improve their sleep schedule")
+    let session = LanguageModelSession(instructions: "You are given user's desired waking up time, desired sleep time, cups of coffee and predicted wake up time. Generate instructions specific to the user. Give 2-line minimal advice to help improve their sleep schedule")
     @State var Fresult: AttributedString = ""
     @State private var wakeUp = Date.now
     @State private var coffeeA = 2
@@ -78,7 +78,13 @@ struct ContentView: View {
                                     } catch {}
                                 }
                             Text("Additional Instructions:").padding(.top, 20).textStylerS()
-                            Text(\(Fresult)).padding(.top, 5)
+                            Text(Fresult)
+                                .lineLimit(nil)
+                                .multilineTextAlignment(.leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                                
+                                .padding(.top, 5)
+                            
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity).padding()
                     }
