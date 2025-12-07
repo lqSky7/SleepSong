@@ -35,7 +35,7 @@ struct ContentView: View {
         NavigationStack{
             Form{
                 VStack(spacing: 20){
-                    Text("Your wake up time?").font(.headline).bold()
+                    Text("Desired Wake up Time?").font(.headline).bold().padding(.top, 10)
                     DatePicker("Select wakeup time", selection: $wakeUp, displayedComponents: .hourAndMinute).labelsHidden()
                     
                     Text("Desired amount of sleep?").font(.headline).bold()
